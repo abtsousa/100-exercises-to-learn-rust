@@ -45,6 +45,32 @@ impl Ticket {
     pub fn status(&self) -> &String {
         &self.status
     }
+
+    fn validate_var(new_var: &str, max_len: usize, var_name: &str) {
+        if new_var.is_empty() {
+            panic!("{} cannot be empty", &var_name)
+        }
+        if new_var.len() > max_len {
+            panic!("{} cannot be longer than {} bytes", &var_name, max_len)
+        }
+    }
+
+    pub fn set_title(&mut self, new_title: String) {
+        Ticket::validate_var(&new_title, 50, "Title");
+        self.title = new_title
+    }
+
+    pub fn set_description(&mut self, new_description: String) {
+        Ticket::validate_var(&new_description, 500, "Description");
+        self.description = new_description
+    }
+
+    pub fn set_status(&mut self, new_status: String) {
+        if new_status != "To-Do" && new_status != "In Progress" && new_status != "Done" {
+            panic!("Only `To-Do`, `In Progress`, and `Done` statuses are allowed");
+        }
+        self.status = new_status
+    }
 }
 
 #[cfg(test)]
